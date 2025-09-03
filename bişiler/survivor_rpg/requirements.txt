@@ -1,0 +1,17 @@
+# Survivor RPG - Python Gereksinimleri
+
+# Ana framework
+kivy>=2.1.0
+
+# Kivy bağımlılıkları (Windows için)
+kivy-deps.angle>=0.3.0
+kivy-deps.glew>=0.3.0
+kivy-deps.gstreamer>=0.3.0
+
+# Android build için
+buildozer>=1.4.0
+cython>=0.29.0
+
+# Geliştirme araçları (opsiyonel)
+pytest>=7.0.0
+black>=22.0.0

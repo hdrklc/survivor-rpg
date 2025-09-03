@@ -1,0 +1,22 @@
+{
+  "meta_currency": 0,
+  "perma_upgrades": {
+    "atk_lvl": 0,
+    "hp_lvl": 0,
+    "speed_lvl": 0,
+    "magnet_lvl": 0,
+    "xp_lvl": 0
+  },
+  "settings": {
+    "sfx_volume": 0.8,
+    "music_volume": 0.7,
+    "vibration": true,
+    "auto_fire": true
+  },
+  "stats": {
+    "total_runs": 0,
+    "best_time": 0.0,
+    "highest_level": 1,
+    "total_enemies": 0
+  }
+}

@@ -1,0 +1,259 @@
+#:kivy 2.1.0
+# Survivor RPG - Ana Kivy UI dosyası
+
+<GameManager>:
+    canvas.before:
+        Color:
+            rgba: 0.1, 0.1, 0.2, 1  # Koyu mavi arkaplan
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<GameScreen>:
+    # Ana oyun ekranı
+    canvas:
+        Color:
+            rgba: 0.2, 0.3, 0.2, 1  # Yeşilimsi oyun alanı
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    # HUD overlay
+    HUD:
+        id: hud
+        
+<HUD>:
+    # Sağ üst - Zaman ve skor
+    Label:
+        text: root.time_text
+        font_size: '16sp'
+        color: 1, 1, 1, 1
+        pos_hint: {'right': 0.98, 'top': 0.98}
+        size_hint: None, None
+        size: self.texture_size
+        
+    # Sol üst - HP bar
+    ProgressBar:
+        id: hp_bar
+        value: root.hp_percent
+        max: 100
+        pos_hint: {'x': 0.02, 'top': 0.98}
+        size_hint: 0.3, None
+        height: '20dp'
+        
+    # Sol üst - XP bar (HP'nin altında)
+    ProgressBar:
+        id: xp_bar
+        value: root.xp_percent
+        max: 100
+        pos_hint: {'x': 0.02, 'top': 0.93}
+        size_hint: 0.3, None
+        height: '15dp'
+        
+    # Level göstergesi
+    Label:
+        text: f"Lv.{root.player_level}"
+        font_size: '14sp'
+        color: 1, 1, 0, 1
+        pos_hint: {'x': 0.33, 'top': 0.95}
+        size_hint: None, None
+        size: self.texture_size
+        
+    # Pause butonu
+    Button:
+        text: "||"
+        font_size: '20sp'
+        pos_hint: {'right': 0.98, 'top': 0.90}
+        size_hint: None, None
+        size: '40dp', '40dp'
+        on_release: root.pause_game()
+
+<LevelUpPanel>:
+    # Karartma overlay
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 0.7
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    # Ana panel
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: '20dp'
+        padding: '20dp'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        size_hint: 0.9, 0.7
+        
+        Label:
+            text: "LEVEL UP!"
+            font_size: '24sp'
+            color: 1, 1, 0, 1
+            size_hint_y: None
+            height: '40dp'
+            
+        Label:
+            text: "Bir yetenek seçin:"
+            font_size: '16sp'
+            color: 1, 1, 1, 1
+            size_hint_y: None
+            height: '30dp'
+        
+        # 3 yetenek kartı
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: '10dp'
+            
+            AbilityCard:
+                id: card1
+                ability_data: root.abilities[0] if len(root.abilities) > 0 else {}
+                on_release: root.select_ability(0)
+                
+            AbilityCard:
+                id: card2
+                ability_data: root.abilities[1] if len(root.abilities) > 1 else {}
+                on_release: root.select_ability(1)
+                
+            AbilityCard:
+                id: card3
+                ability_data: root.abilities[2] if len(root.abilities) > 2 else {}
+                on_release: root.select_ability(2)
+
+<AbilityCard@Button>:
+    ability_data: {}
+    
+    canvas.before:
+        Color:
+            rgba: 0.3, 0.3, 0.5, 0.9
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [10]
+    
+    BoxLayout:
+        orientation: 'vertical'
+        padding: '10dp'
+        spacing: '5dp'
+        
+        Label:
+            text: root.ability_data.get('name', 'Bilinmeyen')
+            font_size: '14sp'
+            color: 1, 1, 1, 1
+            text_size: self.size
+            halign: 'center'
+            valign: 'middle'
+            size_hint_y: None
+            height: '30dp'
+            
+        Label:
+            text: root.ability_data.get('description', '')
+            font_size: '10sp'
+            color: 0.8, 0.8, 0.8, 1
+            text_size: self.size
+            halign: 'center'
+            valign: 'top'
+
+<PauseMenu>:
+    # Karartma overlay
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 0.8
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    # Menü paneli
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: '20dp'
+        padding: '40dp'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        size_hint: 0.8, 0.6
+        
+        Label:
+            text: "OYUN DURAKLATILDI"
+            font_size: '20sp'
+            color: 1, 1, 1, 1
+            size_hint_y: None
+            height: '40dp'
+        
+        Button:
+            text: "Devam Et"
+            font_size: '16sp'
+            size_hint_y: None
+            height: '50dp'
+            on_release: root.resume_game()
+            
+        Button:
+            text: "Ana Menü"
+            font_size: '16sp'
+            size_hint_y: None
+            height: '50dp'
+            on_release: root.go_to_main_menu()
+            
+        Button:
+            text: "Çıkış"
+            font_size: '16sp'
+            size_hint_y: None
+            height: '50dp'
+            on_release: root.quit_game()
+
+<GameOverScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.2, 0, 0, 0.9
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: '20dp'
+        padding: '40dp'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        size_hint: 0.9, 0.8
+        
+        Label:
+            text: "OYUN BİTTİ"
+            font_size: '24sp'
+            color: 1, 0.2, 0.2, 1
+            size_hint_y: None
+            height: '50dp'
+            
+        Label:
+            text: f"Süre: {root.survival_time}"
+            font_size: '16sp'
+            color: 1, 1, 1, 1
+            size_hint_y: None
+            height: '30dp'
+            
+        Label:
+            text: f"Level: {root.final_level}"
+            font_size: '16sp'
+            color: 1, 1, 1, 1
+            size_hint_y: None
+            height: '30dp'
+            
+        Label:
+            text: f"Kazanılan Coin: {root.coins_earned}"
+            font_size: '16sp'
+            color: 1, 1, 0, 1
+            size_hint_y: None
+            height: '30dp'
+        
+        Widget:
+            size_hint_y: 0.3
+            
+        Button:
+            text: "Tekrar Oyna"
+            font_size: '18sp'
+            size_hint_y: None
+            height: '60dp'
+            on_release: root.restart_game()
+            
+        Button:
+            text: "Ana Menü"
+            font_size: '16sp'
+            size_hint_y: None
+            height: '50dp'
+            on_release: root.go_to_main_menu()

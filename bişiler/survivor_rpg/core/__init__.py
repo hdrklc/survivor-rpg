@@ -1,0 +1,1 @@
+# Core sistem modülleri
